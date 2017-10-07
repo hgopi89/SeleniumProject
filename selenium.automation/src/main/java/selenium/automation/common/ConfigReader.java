@@ -15,7 +15,6 @@ public class ConfigReader {
 		
 		System.setProperty("webdriver.type", props.getProperty("webdriver.type"));
 		System.setProperty("urlToTest",  "urlToTest");
-		System.setProperty("os.name", "os.name");
 		
 	}
 	
@@ -25,7 +24,6 @@ public class ConfigReader {
 		
 		logger.info("webdriver.type    =" + props.getProperty("webdriver.type"));
 		logger.info("urlToTest         =" + props.getProperty("urlToTest"));
-		logger.info("os.name           =" + props.getProperty("os.name"));
 
 		setConfigSyetemProperties(props);
 	}

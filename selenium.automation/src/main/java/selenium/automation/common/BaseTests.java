@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Parameter;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +18,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.GeckoDriverService;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariOptions;
@@ -28,9 +32,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 
 
-public class BaseTest {
+public class BaseTests {
 
-	protected WebDriver driver=null;
+	protected static WebDriver driver=null;
 
 	protected Logger logger = Logger.getLogger(this.getClass());
 	public static String webDriverURL;
@@ -50,8 +54,7 @@ public class BaseTest {
 		logger.info("Started Execution Test Suite-----");
 		logger.info("Initialization code before test suite starts----");
 
-
-		ConfigReader.loadConfigProperties("src/test/resources/Config/Config.properties");
+		ConfigReader.loadConfigProperties("src/test/resources/Config.properties");
 
 		String webDriverType = getWebDriverType();
 		logger.info("WebDriver type: " + webDriverType);
@@ -141,34 +144,43 @@ public class BaseTest {
 		case "chrome":
 			if(System.getProperty("os.name").toLowerCase().contains("mac")){
 				logger.info("OS is mac");
-				File cDriver = new File(BaseTest.class.getResource(MAC_CHROMEDRIVER).getFile());
+				File cDriver = new File(BaseTests.class.getResource(MAC_CHROMEDRIVER).getFile());
 
 				if(!cDriver.canExecute()){
 					cDriver.setExecutable(true);
 				}
-				System.setProperty("webdriver.chrome.driver", BaseTest.class.getResource(MAC_CHROMEDRIVER).getFile());
+				System.setProperty("webdriver.chrome.driver", BaseTests.class.getResource(MAC_CHROMEDRIVER).getFile());
 			}else if(System.getProperty("os.name").toLowerCase().contains("win")){
 				logger.info("OS is Windows");
 
-				System.setProperty("webdriver.chrome.driver", BaseTest.class.getResource(WIN_CHROMEDRIVER).getFile());
+				System.setProperty("webdriver.chrome.driver", BaseTests.class.getResource(WIN_CHROMEDRIVER).getFile());
 
 			}
-			driver = new ChromeDriver();
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("allow-running-insecure-content");
+
+			DesiredCapabilities caps = DesiredCapabilities.chrome();
+			LoggingPreferences logPrefs = new LoggingPreferences();
+			logPrefs.enable(LogType.BROWSER, Level.ALL);
+			caps.setCapability("chromeOptions", options);
+			driver = new ChromeDriver(caps);
 			break;
+
+			
 
 		case "firefox":
 			if(System.getProperty("os.name").toLowerCase().contains("mac")){
 				logger.info("OS is mac");
-				File cDriver = new File(BaseTest.class.getResource(MAC_FIREFOXDRIVER).getFile());
+				File cDriver = new File(BaseTests.class.getResource(MAC_FIREFOXDRIVER).getFile());
 
 				if(!cDriver.canExecute()){
 					cDriver.setExecutable(true);
 				}
-				System.setProperty("webdriver.chrome.driver", BaseTest.class.getResource(MAC_FIREFOXDRIVER).getFile());
+				System.setProperty("webdriver.chrome.driver", BaseTests.class.getResource(MAC_FIREFOXDRIVER).getFile());
 			}else if(System.getProperty("os.name").toLowerCase().contains("win")){
 				logger.info("OS is Windows");
 
-				System.setProperty("webdriver.chrome.driver", BaseTest.class.getResource(WIN_FIREFOXDRIVER).getFile());
+				System.setProperty("webdriver.chrome.driver", BaseTests.class.getResource(WIN_FIREFOXDRIVER).getFile());
 
 			}
 			driver = new FirefoxDriver();
@@ -244,5 +256,10 @@ public class BaseTest {
 	}
 	public static String getWebDriverType(){
 		return System.getProperty("webdriver.type");
+	}
+	
+	public static WebDriver getDriver(){
+		return driver;
+		
 	}
 }
