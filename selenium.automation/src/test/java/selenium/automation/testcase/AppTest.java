@@ -117,9 +117,18 @@ public class AppTest extends BaseTests {
 		Assert.assertTrue(false);		
 
 	}
+	@Test
+	public void TC9_verifyCheckOutQuantity_alphaAndSpecialCharacter(){
+		HomePage page = new HomePage(driver);
+		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
+		Assert.assertTrue(false);		
+
+
+	}
+	
 	
 	@Test
-	public void TC9_checkOutUsingEnterKeyAction(){
+	public void TC10_checkOutUsingEnterKeyAction(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndPressEnter(AutomationConstants.QUANTITY,"","","" , AutomationConstants.STATE);		
 		CheckOutPage chPage =new CheckOutPage(driver);

@@ -7,8 +7,8 @@ package selenium.automation.page;
  */
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 
-import junit.framework.Assert;
 
 public class HomePage extends BasePages {
 
