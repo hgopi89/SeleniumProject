@@ -1,10 +1,19 @@
 package selenium.automation.common;
-
+/**
+ * @Class description :  Base tests to be extended across all classes
+ * @author  Gopinath Hariharan
+ * @version 1.0
+ * 
+ */
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Parameter;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
@@ -29,7 +38,12 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import com.relevantcodes.extentreports.ExtentReports;
+
 
 
 public class BaseTests {
@@ -42,6 +56,7 @@ public class BaseTests {
 	public static String WIN_CHROMEDRIVER= "/chromedriver.exe";
 	public static String MAC_FIREFOXDRIVER= "/geckodriver";
 	public static String WIN_FIREFOXDRIVER= "/geckodriver.exe";
+	public static HashMap<String, String> dataMap = new HashMap<String, String>();
 
 
 	//Method to do Setup before test suite
@@ -131,8 +146,6 @@ public class BaseTests {
 
 	}
 
-
-
 	// Setup Local Driver
 	private void setupLocal(String browser) throws Exception{
 		DesiredCapabilities dc = null;
@@ -176,11 +189,11 @@ public class BaseTests {
 				if(!cDriver.canExecute()){
 					cDriver.setExecutable(true);
 				}
-				System.setProperty("webdriver.chrome.driver", BaseTests.class.getResource(MAC_FIREFOXDRIVER).getFile());
+				System.setProperty("webdriver.gecko.driver", BaseTests.class.getResource(MAC_FIREFOXDRIVER).getFile());
 			}else if(System.getProperty("os.name").toLowerCase().contains("win")){
 				logger.info("OS is Windows");
 
-				System.setProperty("webdriver.chrome.driver", BaseTests.class.getResource(WIN_FIREFOXDRIVER).getFile());
+				System.setProperty("webdriver.gecko.driver", BaseTests.class.getResource(WIN_FIREFOXDRIVER).getFile());
 
 			}
 			driver = new FirefoxDriver();
@@ -188,6 +201,51 @@ public class BaseTests {
 		}
 	}
 
+	
+	@BeforeMethod(alwaysRun=true)
+	public void setupBeforeMethod(java.lang.reflect.Method method){
+		driver.get(System.getProperty("urlToTest"));
+			String testName = method.getName().toString();
+			try {
+				dataMap=ExcelUtil.getRowAsMap(System.getProperty("inputExcel"),"TestData", testName);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logger.info(e);
+			}
+			
+			/*
+			 * 			String groupName = t.groups()[0];
+			 * Test t = method.getAnnotation(Test.class);
+			 ExtentReports extent = ExtentObject.getExtent();
+			 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+			Date date = new Date();
+			//dateFormat.format(date),
+			this.ParamApp = ParamApp;
+			test=extent.startTest(testName);
+
+			ExtentObject.setTest(test); //very important
+			if(ParamApp.equalsIgnoreCase("Mobile")){
+				test.assignCategory("Mobile",groupName);
+			}else if (ParamApp.equalsIgnoreCase("STB")){
+				test.assignCategory("STB", groupName);
+			}else if (ParamApp.equalsIgnoreCase("Website")){
+				test.assignCategory("Website", groupName);
+			}
+			 */
+			
+			
+	
+	}
+	
+	@AfterMethod(alwaysRun=true)
+	public void setupAfterTestCase( ITestResult testResult) throws Exception{
+		logExceptionMessageOnFailure(testResult);
+		logger.info("setupAfterTestCase-BaseTest");
+		takeScreenShotOnFailure(testResult);
+		//driver.close();
+
+	}
+	
 	@AfterClass(alwaysRun=true)
 	public void setupAfterTestSuite(){
 		try{
@@ -213,15 +271,6 @@ public class BaseTests {
 		}catch(Exception e){
 			logger.error("setupAfterTestSuiteException " + e);
 		}
-	}
-	
-	@AfterMethod(alwaysRun=true)
-	public void setupAfterTestCase( ITestResult testResult) throws Exception{
-		logExceptionMessageOnFailure(testResult);
-		logger.info("setupAfterTestCase-BaseTest");
-		takeScreenShotOnFailure(testResult);
-
-		
 	}
 	public void logExceptionMessageOnFailure(ITestResult testResult) throws IOException{
 		if(testResult.getStatus()==ITestResult.FAILURE){
