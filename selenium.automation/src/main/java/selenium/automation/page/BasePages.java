@@ -6,6 +6,10 @@ package selenium.automation.page;
  * 
  */
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -60,15 +64,15 @@ public class BasePages extends BaseTests {
 		long timeTakenInMil=endTime-startTime;
 		logger.info("Time taken to Load "+pageName+" in MiliSeconds "+timeTakenInMil);
 	}
-	
+
 	public void clickElement(By ele){
-		
+
 		waitForElement(ele);
 		driver.findElement(ele).click();
 		logger.info("Element clicked "+ ele);
 
 	}
-		
+
 	public void typeElement(By ele, String input){
 		waitForElement(ele);
 		driver.findElement(ele).sendKeys(input);
@@ -82,14 +86,14 @@ public class BasePages extends BaseTests {
 		elementSelect.selectByVisibleText(input);
 		logger.info("Element selected "+ ele+ " value is "+ input);
 	}
-	
+
 	public boolean assertText(By by, String expected){
 		waitForElement(by);
 		String actuals = driver.findElement(by).getText();
 		logger.info("String searched "+ expected + " found "+ actuals);
 		return expected.equals(actuals);
 	}
-	
+
 	public boolean assertWebPage(String[] expected){
 		String bodyText = driver.findElement(By.tagName("body")).getText();
 		for(String s: expected){
@@ -100,13 +104,35 @@ public class BasePages extends BaseTests {
 		return true;
 
 	}
-	
+
 	public void pressEnterButton(By by){
 		waitForElement(by);
 		WebElement element = driver.findElement(by);
+		try {
+			robotKeyEnter();
+		} catch (AWTException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		element.sendKeys(Keys.RETURN);
 
 	}
-	
+
+	public void robotKeyEnter() throws AWTException{
+		if(System.getProperty("browser").toLowerCase().contains("firefox")){
+
+
+			Robot robot = new Robot();
+
+
+			robot.keyPress(KeyEvent.VK_ENTER);
+			robot.keyRelease(KeyEvent.VK_ENTER);
+			robot.setAutoDelay(200);
+
+			robot = null;
+
+
+		}
+	}
 
 }

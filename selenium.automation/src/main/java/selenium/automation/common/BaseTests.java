@@ -1,4 +1,7 @@
 package selenium.automation.common;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 /**
  * @Class description :  Base tests to be extended across all classes
  * @author  Gopinath Hariharan
@@ -19,6 +22,7 @@ import java.util.logging.Level;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.TakesScreenshot;
@@ -37,12 +41,18 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
+import java.awt.event.KeyEvent;
+
+
 
 
 
@@ -58,13 +68,12 @@ public class BaseTests {
 	public static String WIN_FIREFOXDRIVER= "/geckodriver.exe";
 	public static HashMap<String, String> dataMap = new HashMap<String, String>();
 
-
 	//Method to do Setup before test suite
 
 	@Parameters({"browser", "platform"})
 	@BeforeClass(alwaysRun=true)
-	public void setupBeforeTestSuite(String browser, String platform) throws Exception{
-
+	public void setupBeforeTestClass(String browser, String platform) throws Exception{
+		System.setProperty("browser", browser);
 		logger.info("Setup Before Test Suite- BaseTest");
 		logger.info("Started Execution Test Suite-----");
 		logger.info("Initialization code before test suite starts----");
@@ -179,7 +188,7 @@ public class BaseTests {
 			driver = new ChromeDriver(caps);
 			break;
 
-			
+
 
 		case "firefox":
 			if(System.getProperty("os.name").toLowerCase().contains("mac")){
@@ -201,51 +210,36 @@ public class BaseTests {
 		}
 	}
 
-	
+
 	@BeforeMethod(alwaysRun=true)
 	public void setupBeforeMethod(java.lang.reflect.Method method){
 		driver.get(System.getProperty("urlToTest"));
-			String testName = method.getName().toString();
-			try {
-				dataMap=ExcelUtil.getRowAsMap(System.getProperty("inputExcel"),"TestData", testName);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				logger.info(e);
-			}
-			
-			/*
-			 * 			String groupName = t.groups()[0];
-			 * Test t = method.getAnnotation(Test.class);
-			 ExtentReports extent = ExtentObject.getExtent();
-			 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
-			Date date = new Date();
-			//dateFormat.format(date),
-			this.ParamApp = ParamApp;
-			test=extent.startTest(testName);
+		String testName = method.getName().toString();
+		try {
+			dataMap=ExcelUtil.getRowAsMap(System.getProperty("inputExcel"),"TestData", testName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.info(e);
+		}
 
-			ExtentObject.setTest(test); //very important
-			if(ParamApp.equalsIgnoreCase("Mobile")){
-				test.assignCategory("Mobile",groupName);
-			}else if (ParamApp.equalsIgnoreCase("STB")){
-				test.assignCategory("STB", groupName);
-			}else if (ParamApp.equalsIgnoreCase("Website")){
-				test.assignCategory("Website", groupName);
-			}
-			 */
-			
-			
-	
+
 	}
-	
+
 	@AfterMethod(alwaysRun=true)
 	public void setupAfterTestCase( ITestResult testResult) throws Exception{
 		logExceptionMessageOnFailure(testResult);
 		logger.info("setupAfterTestCase-BaseTest");
 		takeScreenShotOnFailure(testResult);
-		//driver.close();
 
 	}
-	
+
+
+
+	@AfterTest
+	public void setupAfterTest(){
+
+	}
+
 	@AfterClass(alwaysRun=true)
 	public void setupAfterTestSuite(){
 		try{
@@ -271,6 +265,7 @@ public class BaseTests {
 		}catch(Exception e){
 			logger.error("setupAfterTestSuiteException " + e);
 		}
+
 	}
 	public void logExceptionMessageOnFailure(ITestResult testResult) throws IOException{
 		if(testResult.getStatus()==ITestResult.FAILURE){
@@ -281,7 +276,7 @@ public class BaseTests {
 			}
 		}
 	}
-	
+
 	public void takeScreenShotOnFailure(ITestResult testResult) throws IOException{
 		logger.info("Test Result is: "+testResult.getStatus());
 		if(testResult.getStatus()==ITestResult.FAILURE){
@@ -306,9 +301,14 @@ public class BaseTests {
 	public static String getWebDriverType(){
 		return System.getProperty("webdriver.type");
 	}
-	
+
 	public static WebDriver getDriver(){
 		return driver;
-		
+
 	}
+
+
+
+
+
 }

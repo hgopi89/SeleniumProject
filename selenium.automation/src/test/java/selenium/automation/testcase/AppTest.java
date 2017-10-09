@@ -8,6 +8,8 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.relevantcodes.extentreports.LogStatus;
+
 import bsh.org.objectweb.asm.Constants;
 import selenium.automation.common.AutomationConstants;
 import selenium.automation.common.BaseTests;
@@ -25,7 +27,13 @@ public class AppTest extends BaseTests {
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));
 		
 		CheckOutPage chPage =new CheckOutPage(driver);
-		chPage.verifySubTotal();
+		if (chPage.verifySubTotal()){
+			logger.info("TC1_verifyCheckOutQuantity_allValidInputs case passed");
+			assert true;
+		}else{
+			logger.info("TC1_verifyCheckOutQuantity_allValidInputs Test case failed ");
+			assert false;
+		}
 	}
 	
 	@Test
@@ -33,7 +41,13 @@ public class AppTest extends BaseTests {
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
-		chPage.verifySubTotal();		
+		if (chPage.verifySubTotal()){
+			logger.info("TC2_verifyCheckOutQuantity_oneValidInput case passed");
+			assert true;
+		}else{
+			logger.info("TC2_verifyCheckOutQuantity_oneValidInput Test case failed ");
+			assert false;
+		}	
 
 	}
 	@Test
@@ -41,7 +55,13 @@ public class AppTest extends BaseTests {
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
-		chPage.verifySubTotal();		
+		if (chPage.verifySubTotal()){
+			logger.info("TC3_verifyCheckOutQuantity_zeroQuantity case passed");
+			assert true;
+		}else{
+			logger.info("TC3_verifyCheckOutQuantity_zeroQuantity Test case failed ");
+			assert false;
+		}
 
 	}
 	@Test
@@ -56,14 +76,20 @@ public class AppTest extends BaseTests {
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
-		chPage.verifySubTotal();		
+		if (chPage.verifySubTotal()){
+			logger.info("TC5_verifyCheckOutQuantity_emptyStateInput case passed");
+			assert true;
+		}else{
+			logger.info("TC5_verifyCheckOutQuantity_emptyStateInput Test case failed ");
+			assert false;
+		}		
 
 	}
 	
 	@Test
 	public void TC6_verifyCheckOutQuantity_emptyQuantityInput(){
 		HomePage page = new HomePage(driver);
-		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
+		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));
 		Assert.assertTrue(false);		
 
 	}
@@ -73,7 +99,13 @@ public class AppTest extends BaseTests {
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
-		chPage.verifySubTotal();		
+		if (chPage.verifySubTotal()){
+			logger.info("TC7_verifyCheckOutQuantity_allEmptyInputTest case passed");
+			assert true;
+		}else{
+			logger.info("TC7_verifyCheckOutQuantity_allEmptyInput Test case failed ");
+			assert false;
+		}
 
 	}
 	@Test
@@ -91,7 +123,13 @@ public class AppTest extends BaseTests {
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndPressEnter(AutomationConstants.QUANTITY,"","","" , AutomationConstants.STATE);		
 		CheckOutPage chPage =new CheckOutPage(driver);
-		chPage.verifySubTotal();		
+		if (chPage.verifySubTotal()){
+			logger.info("TC9_checkOutUsingEnterKeyAction case passed");
+			assert true;
+		}else{
+			logger.info("TC9_checkOutUsingEnterKeyAction Test case failed ");
+			assert false;
+		}	
 		
 	}
 	

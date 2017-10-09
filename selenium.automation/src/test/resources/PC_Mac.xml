@@ -6,15 +6,15 @@
 	<test name="Website- Firefox" preserve-order="true" parallel="false">
 		<parameter name="browser" value="firefox" />
 		<classes>
-		<!-- 	<class name="selenium.automation.testcase.AppTest"></class> -->
+		 	<class name="selenium.automation.testcase.AppTest"></class> 
 		</classes>
 	</test>
 
 	<test name="Website- Chrome" preserve-order="true" parallel="false">
 		<parameter name="browser" value="chrome" />
 		<classes>
-			<class name="selenium.automation.testcase.AppTest">
-			</class>
+			  <class name="selenium.automation.testcase.AppTest"></class>
+			
 		</classes>
 	</test>
 </suite>

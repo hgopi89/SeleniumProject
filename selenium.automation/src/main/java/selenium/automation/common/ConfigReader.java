@@ -38,6 +38,7 @@ public class ConfigReader {
 		logger.info("defaultObjectWaitTime =" + props.getProperty("defaultObjectWaitTime"));
 		logger.info("defaultPageWaitTime =" + props.getProperty("defaultPageWaitTime"));
 		logger.info("inputExcel =" + props.getProperty("inputExcel"));
+		logger.info("browser =" + System.getProperty("browser"));
 
 		setConfigSyetemProperties(props);
 	}
