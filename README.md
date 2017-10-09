@@ -2,6 +2,7 @@
 Complete Selenium Automation Framework
 
 #Steps to Import the SeleniumProject
+
 Method 1
 1. Navigate to src/test/resources
 2. Right click and run the PC_MAC.xml as testNG suite.
