@@ -9,11 +9,13 @@ package selenium.automation.page;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.google.common.base.Function;
 
@@ -87,5 +89,24 @@ public class BasePages extends BaseTests {
 		logger.info("String searched "+ expected + " found "+ actuals);
 		return expected.equals(actuals);
 	}
+	
+	public boolean assertWebPage(String[] expected){
+		String bodyText = driver.findElement(By.tagName("body")).getText();
+		for(String s: expected){
+			logger.info("Expected String "+ s);
+			logger.info(bodyText.contains(s));
+			Assert.assertTrue(bodyText.contains(s));
+		}
+		return true;
+
+	}
+	
+	public void pressEnterButton(By by){
+		waitForElement(by);
+		WebElement element = driver.findElement(by);
+		element.sendKeys(Keys.RETURN);
+
+	}
+	
 
 }

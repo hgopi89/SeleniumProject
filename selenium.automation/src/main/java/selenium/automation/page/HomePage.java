@@ -50,6 +50,18 @@ public class HomePage extends BasePages {
 		return Integer.parseInt(driver.findElement(maxQuantityText_zebra).getText().toString());
 		
 	}
+
+	public void enterValuesAndPressEnter(String q1,String q2, String q3, String q4, String state){
+		verifyHomePage();
+		typeElement(quantityText_zebra, q1);
+		typeElement(quantityText_lion, q2);
+		typeElement(quantityText_elephant, q3);
+		typeElement(quantityText_giraffe, q4);
+		selectElement(stateDropDown, state);
+		pressEnterButton(checkOutButton);
+		waitForPageLoad("HomePage> CheckoutPage");
+
+	}
 	
 	
 	

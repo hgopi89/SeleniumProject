@@ -8,6 +8,8 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import bsh.org.objectweb.asm.Constants;
+import selenium.automation.common.AutomationConstants;
 import selenium.automation.common.BaseTests;
 import selenium.automation.page.CheckOutPage;
 import selenium.automation.page.HomePage;
@@ -18,7 +20,7 @@ import selenium.automation.page.HomePage;
 public class AppTest extends BaseTests {
 	
 	@Test
-	public void TC_verifyCheckOutQuantity_1(){
+	public void TC1_verifyCheckOutQuantity_allValidInputs(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));
 		
@@ -27,7 +29,7 @@ public class AppTest extends BaseTests {
 	}
 	
 	@Test
-	public void TC_verifyCheckOutQuantity_2(){
+	public void TC2_verifyCheckOutQuantity_oneValidInput(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
@@ -35,7 +37,7 @@ public class AppTest extends BaseTests {
 
 	}
 	@Test
-	public void TC_verifyCheckOutQuantity_3(){
+	public void TC3_verifyCheckOutQuantity_zeroQuantity(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
@@ -43,14 +45,14 @@ public class AppTest extends BaseTests {
 
 	}
 	@Test
-	public void TC_verifyCheckOutQuantity_4(){
+	public void TC4_verifyCheckOutQuantity_negativeInput(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));
 		Assert.assertTrue(false);
 	}
 		
 	@Test
-	public void TC_verifyCheckOutQuantity_5(){
+	public void TC5_verifyCheckOutQuantity_emptyStateInput(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
@@ -59,7 +61,7 @@ public class AppTest extends BaseTests {
 	}
 	
 	@Test
-	public void TC_verifyCheckOutQuantity_6(){
+	public void TC6_verifyCheckOutQuantity_emptyQuantityInput(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		Assert.assertTrue(false);		
@@ -67,7 +69,7 @@ public class AppTest extends BaseTests {
 	}
 	
 	@Test
-	public void TC_verifyCheckOutQuantity_7(){
+	public void TC7_verifyCheckOutQuantity_allEmptyInput(){
 		HomePage page = new HomePage(driver);
 		page.enterValuesAndCheckOut(dataMap.get("Quantity1"), dataMap.get("Quantity2"), dataMap.get("Quantity3"), dataMap.get("Quantity4"), dataMap.get("State"));		
 		CheckOutPage chPage =new CheckOutPage(driver);
@@ -75,14 +77,25 @@ public class AppTest extends BaseTests {
 
 	}
 	@Test
-	public void TC_enterExcessQuantity(){
+	public void TC8_enterExcessQuantity(){
 		HomePage page = new HomePage(driver);
 		int maxCount =page.getMaxQuantityCount();
 		String str_MaxCount = String.valueOf((maxCount+1));
-		page.enterValuesAndCheckOut(str_MaxCount,"","","", "Alaska");		
+		page.enterValuesAndCheckOut(str_MaxCount,"","","", AutomationConstants.STATE);		
 		Assert.assertTrue(false);		
 
 	}
+	
+	@Test
+	public void TC9_checkOutUsingEnterKeyAction(){
+		HomePage page = new HomePage(driver);
+		page.enterValuesAndPressEnter(AutomationConstants.QUANTITY,"","","" , AutomationConstants.STATE);		
+		CheckOutPage chPage =new CheckOutPage(driver);
+		chPage.verifySubTotal();		
+		
+	}
+	
+	
 	
 	
 }
